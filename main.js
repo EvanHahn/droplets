@@ -36,7 +36,7 @@ function Droplet() {
 
 	this.x = mouse.x;
 	this.y = mouse.y;
-	this.x$ = mouse.x$ / 100;
+	this.x$ = mouse.x$ / 80;
 	if (mouse.clicking)
 		this.y$ = Math.random() * -1;
 	else
