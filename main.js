@@ -54,7 +54,7 @@ function Droplet() {
 	this.x$$ = 0;
 	this.y$$ = .01;
 
-	this.sizeBonus = Math.random() * 2;
+	this.sizeBonus = Math.random() * 3;
 
 	this.started = new Date;
 	this.color = COLORS[colorChoice];
@@ -113,3 +113,25 @@ function tick(t) {
 }
 
 tick(0);
+
+// white noise
+var audioContext = new (window.AudioContext || window.webkitAudioContext);
+var bufferSize = 4096;
+var brownNoise = (function() {
+    var lastOut = 0.0;
+    var node = audioContext.createScriptProcessor(bufferSize, 1, 1);
+    node.onaudioprocess = function(e) {
+        var output = e.outputBuffer.getChannelData(0);
+        for (var i = 0; i < bufferSize; i++) {
+            var white = (Math.random() * .5 - .25);
+            output[i] = (lastOut + (0.02 * white)) / 1.02;
+            lastOut = output[i];
+            output[i] *= 3 + Math.sin(Date.now() / 500);
+        }
+    }
+    return node;
+})();
+
+var gain = audioContext.createGainNode()
+
+brownNoise.connect(audioContext.destination);
