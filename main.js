@@ -1,3 +1,10 @@
+COLORS = [
+	[12, 0, 1],
+	[16, 16, 16]
+];
+
+colorChoice = 0;
+
 var canvas = document.querySelector('canvas');
 var context = canvas.getContext('2d');
 
@@ -25,11 +32,17 @@ $(canvas).on('mousemove', function(event) {
 	}, 10);
 });
 
-$(canvas).on('mousedown', function() { mouse.clicking = true; });
+$(canvas).on('mousedown', function() {
+	mouse.clicking = true;
+	colorChoice = (colorChoice + 1) % COLORS.length;
+});
 $(canvas).on('mouseup', function() { mouse.clicking = false; });
 
-function randomHex() {
-	return Math.floor(Math.random() * 16).toString(16);
+function hexFrom(arr) {
+	var r = Math.floor(arr[0] * arr[3]).toString(16);
+	var g = Math.floor(arr[1] * arr[3]).toString(16);
+	var b = Math.floor(arr[2] * arr[3]).toString(16);
+	return ['#', r, r, g, g, b, b].join('');
 }
 
 function Droplet() {
@@ -37,26 +50,21 @@ function Droplet() {
 	this.x = mouse.x;
 	this.y = mouse.y;
 	this.x$ = mouse.x$ / 80;
-	if (mouse.clicking)
-		this.y$ = Math.random() * -1;
-	else
-		this.y$ = 0;
+	this.y$ = 0;
 	this.x$$ = 0;
 	this.y$$ = .01;
 
 	this.sizeBonus = Math.random() * 2;
 
-	this.color = '#';
-	for (var i = 1; i <= 3; i ++) {
-		var hex = randomHex();
-		this.color += hex + hex;
-	}
+	this.started = new Date;
+	this.color = COLORS[colorChoice];
 
 }
 
 Droplet.prototype.draw = function(ctx) {
 
-	ctx.fillStyle = this.color;
+	var multiplier = Math.min(Math.abs((new Date) - this.started) / 500, 1);
+	ctx.fillStyle = hexFrom([this.color[0], this.color[1], this.color[2], 1 - multiplier]);
 
 	ctx.beginPath();
 	ctx.arc(
