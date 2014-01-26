@@ -1,9 +1,9 @@
-COLORS = [
+var COLORS = [
 	[12, 0, 1],
 	[16, 16, 16]
 ];
 
-colorChoice = 0;
+var colorChoice = 0;
 
 var canvas = document.querySelector('canvas');
 var context = canvas.getContext('2d');
