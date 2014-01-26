@@ -132,6 +132,4 @@ var brownNoise = (function() {
     return node;
 })();
 
-var gain = audioContext.createGainNode()
-
 brownNoise.connect(audioContext.destination);
