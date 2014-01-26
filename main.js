@@ -126,7 +126,7 @@ var brownNoise = (function() {
             var white = (Math.random() * .5 - .25);
             output[i] = (lastOut + (0.02 * white)) / 1.02;
             lastOut = output[i];
-            output[i] *= 3 + Math.sin(Date.now() / 500);
+            output[i] *= 3 + Math.sin(Date.now() / 700);
         }
     }
     return node;
