@@ -4,7 +4,7 @@ var COLORS = [
 	[14, 14, 0],
 	[10, 1, 10],
 	[2, 14, 0],
-	[15, 15, 15],
+	[15, 15, 15]
 ];
 
 var colorChoice = 0;
@@ -119,6 +119,7 @@ function tick(t) {
 tick(0);
 
 // white noise
+// modified from http://noisehack.com/generate-noise-web-audio-api/
 var audioContext = new (window.AudioContext || window.webkitAudioContext);
 var bufferSize = 4096;
 var brownNoise = (function() {
@@ -127,7 +128,7 @@ var brownNoise = (function() {
     node.onaudioprocess = function(e) {
         var output = e.outputBuffer.getChannelData(0);
         for (var i = 0; i < bufferSize; i++) {
-            var white = (Math.random() * .5 - .25);
+            var white = Math.random() * .5 - .25;
             output[i] = (lastOut + (0.02 * white)) / 1.02;
             lastOut = output[i];
             output[i] *= 3 + Math.sin(Date.now() / 700);
