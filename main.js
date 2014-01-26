@@ -9,10 +9,20 @@ $(window).on('resize', makeCanvasFillPage);
 makeCanvasFillPage();
 
 var mouse = { clicking: false };
+var stopped;
 $(canvas).on('mousemove', function(event) {
+	clearTimeout(stopped);
 	mouse.x = event.clientX;
 	mouse.y = event.clientY;
-	console.log(mouse.x, mouse.y);
+	mouse.previous = mouse.previous || { x: mouse.x, y: mouse.y };
+	mouse.x$ = mouse.x - mouse.previous.x;
+	mouse.y$ = mouse.y - mouse.previous.y;
+	stopped = setTimeout(function() {
+		mouse.previous.x = mouse.x;
+		mouse.previous.y = mouse.y;
+		mouse.x$ = 0;
+		mouse.y$ = 0;
+	}, 10);
 });
 
 $(canvas).on('mousedown', function() { mouse.clicking = true; });
@@ -26,7 +36,7 @@ function Droplet() {
 
 	this.x = mouse.x;
 	this.y = mouse.y;
-	this.x$ = 0;
+	this.x$ = mouse.x$ / 100;
 	if (mouse.clicking)
 		this.y$ = Math.random() * -1;
 	else
